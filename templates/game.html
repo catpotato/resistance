@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block main %}
+<main>
+	<section id = "begun">
+		<h2>Game Status</h2>
+		<p>not started</p>
+	</section>
+	<section id = "ready">
+		<h2>Ready?</h2>
+		<p><input type = "checkbox" id = "ready-button">Ready</p>
+	</section>
+	<section id = "previous-rounds">
+		<h2>The Game so Far</h2>
+		<p id = "round-a"></p>
+		<p id = "round-b"></p>
+		<p id = "round-c"></p>
+		<p id = "round-d"></p>
+		<p id = "round-e"></p>
+	</section>
+	<section id = "mission">
+		<h2> Mission Satus</h2>
+		<p></p>
+	</section>
+	<section id = "proposing">
+		<h2> Proposer</h2>
+		<p></p>
+	</section>
+	<section id = "vote-results">
+		<h2> The Results </h2>
+		<p></p>		
+	</section>
+	<section id = "vote-cards">
+		<h2>Place Your Vote</h2>
+		<button type = "button" id = "black-card">Yay!</button>
+		<button type = "button" id = "red-card">Nay!</button>	
+	</section>
+	<section id = "role">
+		<h2>Your Role</h2>
+		<p></p>
+	</section>
+	<section id = "secrets">
+		<h2>Other Information</h2>
+		<p></p>
+	</section>
+	<section id = "win">
+		<h2>Has Anybody Won Yet?</h2>
+		<p></p>
+	</section>
+</main>
+{% endblock %}
