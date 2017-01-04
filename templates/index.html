@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 {% block main %}
 <main>
-	<a href = "/game">Play Resistance!</a>
+	<form method = "POST" action = "/">
+		{{ form.username.label }}
+		{{ form.username }}
+
+		{{ form.room.label }}
+		{{ form.room }}
+
+		{{ form.submit() }}
+	</form>
 </main>
 {% endblock %}

@@ -62,7 +62,12 @@ function Frequency(frequency_name){
 	this.value = frequency_value;
 }
 
+//initializes intervals for game
 
+var UBER_INTERVAL = new Interval([], "uber");
+var FAST_INTERVAL = new Interval([], "fast");
+var NORM_INTERVAL = new Interval([], "norm");
+var SLOW_INTERVAL = new Interval([], "slow");
 
 
 
