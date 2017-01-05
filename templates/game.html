@@ -1,4 +1,8 @@
 {% extends "layout.html" %}
+{% block conditional_js %}
+NORM_INTERVAL.add([GET_ready_status]);
+// adds checking the ready status to be checked at a moderate interval
+{% endblock %}
 {% block main %}
 <main>
 	<section id = "user-info">
@@ -44,11 +48,11 @@
 	</section>
 	<section id = "proposal">
 		<h2>Propose Your Mission</h2>
-		<button type = "button" id = "player-a">Player 1</button>
-		<button type = "button" id = "player-b">Player 2</button>
-		<button type = "button" id = "player-c">Player 3</button>
-		<button type = "button" id = "player-d">Player 4</button>	
-		<button type = "button" id = "player-e">Player 5</button>
+		<button type = "button" id = "a">Player 1</button>
+		<button type = "button" id = "b">Player 2</button>
+		<button type = "button" id = "c">Player 3</button>
+		<button type = "button" id = "d">Player 4</button>	
+		<button type = "button" id = "e">Player 5</button>
 		<button type = "button" id = "confirm">confirm</button>
 	</section>
 	<section id = "vote-cards">

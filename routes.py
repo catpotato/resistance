@@ -25,7 +25,6 @@ def index():
 		if form.room.data == "":
 			empty_rooms = find_empty_rooms(Game.query.all())
 			new_room = empty_rooms[random.randint(0, len(empty_rooms) - 1)].room
-			# adds room to user session
 			session["room"] = new_room;
 			# TODO add in making room active or not
 		# deal with entering an existing room
@@ -33,11 +32,13 @@ def index():
 			session["room"] = form.room.data
 			# TODOIF: add in checking to make sure user enters a room that exists
 
-		# add user to database
 		# TODO: make sure that room does not have more than five people in it
-		new_player = Player(session["username"], session["room"])
-		db.session.add(new_player)
-		db.session.commit()
+		# if user doesnt exist, put them in the database, if they do, they dont need to be put in the database (basically a dev login for me to bugtest)
+		if find_player(session["username"]) is None:
+			new_player = Player(session["username"], session["room"])
+			db.session.add(new_player)
+			db.session.commit()
+
 		return redirect("/game")
 
 # TODO: when user leaves the page erase them from the databse
@@ -45,6 +46,7 @@ def index():
 @app.route("/game")
 def game():
 	return render_template("game.html")
+
 
 # json reply GET requests
 @app.route("/user_info")
@@ -70,7 +72,12 @@ def mission_status():
 
 @app.route("/proposer")
 def proposer():
-	return "proposer"
+	# retrun the person proposing the current mission
+	game = find_game(session["room"])
+	turn = ((game.cycle+1) % 5) - 1
+	role = sqlite_string_to_list(game.turn_order)[turn]
+	proposer = Player.query.filter_by(role = role).first()
+	return jsonify(username = proposer.username)
 
 @app.route("/voting_results")
 def voting_results():
@@ -81,7 +88,7 @@ def voting_results():
 def secrets():
 	# get users role
 	# TODOIF make sure that game is started
-	player = Player.query.filter_by(username = session["username"]).first()
+	player = find_player(session["username"])
 	# mix up the spies so i dont know which is which
 	spies = [Player.query.filter_by(role = card_to_number("ace of red")).first(), Player.query.filter_by(role = card_to_number("2 of red")).first()]
 	randy = random.randint(0,1)
@@ -120,7 +127,7 @@ def ready():
 	# TODOIF actually get the input from the checkbox instead of assuming it is true
 	# set player ready status to true
 	# TODO count up the number of players and add it to games table
-	player = Player.query.filter_by(username = session["username"]).first()
+	player = find_player(session["username"]);
 	player.ready = 1
 	db.session.commit()
 	# check if everyone is ready, and if they are, initialize the game

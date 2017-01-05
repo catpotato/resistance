@@ -9,6 +9,8 @@
 		<script src = "{{ url_for('static', filename = 'js/main.js') }}"></script>
 		<script type=text/javascript>
   			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  			{% block conditional_js %}
+			{% endblock %}
   			//give global varibale for root of application
 		</script>
 	</head>

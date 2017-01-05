@@ -8,7 +8,6 @@ def find_empty_rooms(rooms):
 def find_ready_players(players):
 	temp = players[:]
 	for player in players:
-		print(not player.ready)
 		if(not player.ready):
 			temp.remove(player)
 	return temp

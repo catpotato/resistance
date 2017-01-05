@@ -63,6 +63,9 @@ def initialize(room):
 def find_game(room):
 	return Game.query.filter_by(room = room).first()
 
+def find_player(username):
+	return Player.query.filter_by(username = username).first()
+
 
 
 
