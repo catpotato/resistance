@@ -3,7 +3,7 @@ var ROOM;*/
 $(function(){
 	$("#ready-button").bind("click", function(){
 		// post ready status
-		$.getJSON($SCRIPT_ROOT + '/ready', {ready : true}, function(data){ console.log("sucess");} );
+		$.getJSON($SCRIPT_ROOT + '/ready', {}, function(){} );
 	});
 	// adds checking the ready status to be checked at a moderate interval
 	NORM_INTERVAL.add([GET_ready_status]);

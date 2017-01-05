@@ -1,5 +1,5 @@
 
-
+//functions for debuggin intervals
 function smoke(){
 	console.log("smoke")
 }
