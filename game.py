@@ -42,6 +42,7 @@ class Game(db.Model):
 	turn_order = db.Column(db.String)
 	in_proposal = db.Column(db.String)
 	cycle = db.Column(db.Integer)
+	voting = db.Column(db.Integer)
 
 	def __str__(self):
 		return ("room: " + self.room + " | status: " + str(self.active))
@@ -65,6 +66,16 @@ def find_game(room):
 
 def find_player(username):
 	return Player.query.filter_by(username = username).first()
+
+def find_username_from_role(room, role):
+	return Player.query.filter_by(role = role, room = room).first().username
+
+def find_username_from_id(role):
+	return Player.query.filter_by(role = role).first().username
+
+# def get_game_data(game, data):
+#	game = find_game(game)
+#	return game.data
 
 
 

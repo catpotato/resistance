@@ -8,6 +8,8 @@ function begin_game(){
 	update(turn_order, "turn_order");
 	// check who is proposing
 	update(proposer, "proposer");
+	// once proposal is made, add a checker to everyone elses pages so that they can get the info when a proposal is made
+	NORM_INTERVAL.add([GET_voting]);
 }
 
 function update(handler, adress){
@@ -35,6 +37,11 @@ function turn_order(order){
 //updates propsoer view
 function proposer(proposer){
 	$("#proposing p").text(proposer.username)
+}
+
+function proposal(game){
+	console.log(game.proposal);
+	$("#proposal-result p").text(game.proposal)
 }
 function new_turn(){
 

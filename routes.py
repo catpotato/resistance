@@ -26,6 +26,7 @@ def index():
 			empty_rooms = find_empty_rooms(Game.query.all())
 			new_room = empty_rooms[random.randint(0, len(empty_rooms) - 1)].room
 			session["room"] = new_room;
+			# TODO reset room
 			# TODO add in making room active or not
 		# deal with entering an existing room
 		else:
@@ -70,6 +71,11 @@ def mission_status():
 	#
 	return "mission status"
 
+@app.route("/voting")
+def voting():
+	game = find_game(session["room"])
+	return jsonify(voting = bool(game.voting))
+
 @app.route("/proposer")
 def proposer():
 	# retrun the person proposing the current mission
@@ -110,17 +116,43 @@ def win_status():
 @app.route("/turn_order")
 def turn_order():
 	game = find_game(session["room"])
+	# decode proposal data encoded in a string as list of roles
 	turn_order = []
 	for role in sqlite_string_to_list(game.turn_order):
-		turn_order.append(Player.query.filter_by(role = role).first().username)
+		turn_order.append(find_username_from_role(session["room"], role))
 	return jsonify(turn_order = turn_order)
+
+@app.route("/proposal")
+def proposal():
+	game = find_game(session["room"])
+	# decode proposal data encoded in a string as list of roles
+	proposal = []
+	for role in sqlite_string_to_list(game.in_proposal):
+		proposal.append(find_username_from_role(session["room"], role))
+	return jsonify(proposal = proposal)
+
 
 # TODO route that gives cards design out
 
-# POST requests
+# POST requests from javascript that send info, also will maybe work if i add an ai in the future
+
+# TODOIF make it impossible for user to access the post requests
 @app.route("/vote")
 def vote():
 	return "vote"
+
+@app.route("/propose", methods = ["GET","POST"])
+def propose():
+	proposal = request.form.getlist("proposal[]")
+	for i in range(0,len(proposal)):
+		proposal[i] = int(Player.query.filter_by(username = proposal[i]).first().role)
+	# TODO verify that the request was good
+	# insert proposal 
+	game = find_game(session["room"])
+	game.in_proposal = list_to_sqlite_string(proposal)
+	game.voting = 1
+	db.session.commit()
+	return redirect("/")
 
 @app.route("/ready")
 def ready():
