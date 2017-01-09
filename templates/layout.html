@@ -3,16 +3,17 @@
 	<head>
 		<script src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<!-- google's jquery -->
-		<script src = "{{ url_for('static', filename = 'js/intervals.js') }}"></script>
-		<script src = "{{ url_for('static', filename = 'js/checkers.js') }}"></script>
-		<script src = "{{ url_for('static', filename = 'js/updaters.js') }}"></script>
-		<script src = "{{ url_for('static', filename = 'js/main.js') }}"></script>
 		<script type=text/javascript>
   			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   			{% block conditional_js %}
 			{% endblock %}
   			//give global varibale for root of application
 		</script>
+		<script src = "{{ url_for('static', filename = 'js/intervals.js') }}"></script>
+		<script src = "{{ url_for('static', filename = 'js/checkers.js') }}"></script>
+		<script src = "{{ url_for('static', filename = 'js/updaters.js') }}"></script>
+		<script src = "{{ url_for('static', filename = 'js/main.js') }}"></script>
+		<script src = "{{ url_for('static', filename = 'js/monitors.js') }}"></script>
 	</head>
 	<body>
 		<a href = "/"><h1>Resistance</h1></a>

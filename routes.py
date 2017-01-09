@@ -42,14 +42,14 @@ def index():
 
 		return redirect("/game")
 
-# TODO: when user leaves the page erase them from the databse
-
 @app.route("/game")
 def game():
 	return render_template("game.html")
 
+# TODO: when user leaves the page erase them from the databse
 
 # json reply GET requests
+
 @app.route("/user_info")
 def user_info():
 	return jsonify(username = session["username"], room = session["room"])
@@ -71,9 +71,12 @@ def mission_status():
 	#
 	return "mission status"
 
+# returns whether a mission is being voted on or not
 @app.route("/voting")
 def voting():
 	game = find_game(session["room"])
+	print("I RETURNED VOTING AND IT'S VALUE WAS : ")
+	print(game.voting)
 	return jsonify(voting = bool(game.voting))
 
 @app.route("/proposer")
@@ -85,11 +88,7 @@ def proposer():
 	proposer = Player.query.filter_by(role = role).first()
 	return jsonify(username = proposer.username)
 
-@app.route("/voting_results")
-def voting_results():
-	# retrun whether current vote passed or failed
-	return "voting results"
-
+# gives out role and other role information
 @app.route("/secrets")
 def secrets():
 	# get users role
@@ -109,10 +108,12 @@ def secrets():
 		# otherwise show them nothing
 		return jsonify(role = number_to_card(player.role))
 
+# tells if anyone has won the game yet
 @app.route("/win_status")
 def win_status():
 	return "win status"
 
+# gives out the turn of play for the current game
 @app.route("/turn_order")
 def turn_order():
 	game = find_game(session["room"])
@@ -122,6 +123,7 @@ def turn_order():
 		turn_order.append(find_username_from_role(session["room"], role))
 	return jsonify(turn_order = turn_order)
 
+# gives out people who are in the current proposal
 @app.route("/proposal")
 def proposal():
 	game = find_game(session["room"])
@@ -131,26 +133,109 @@ def proposal():
 		proposal.append(find_username_from_role(session["room"], role))
 	return jsonify(proposal = proposal)
 
+# gives out array of arrays with [username, vote] for people who have voted
+@app.route("/votes")
+def votes():
+	players = Player.query.filter_by(room = session["room"]).all();
+	votes = []
+	for player in players:
+		votes.append([player.username, player.vote])
+	return jsonify(votes = votes)
+
+# gives out number of people who have voted
+@app.route("/voted")
+def voted():
+	players = Player.query.filter_by(room = session["room"]).all();
+	voters = len(find_voted_players(players))
+	# increase cycle by 1 if everyone has voted
+	if voters == 5:
+		game = find_game(session["room"])
+		game.cycle += 1
+		# if there is a winner, and there are 5 votes, the game is no longer proposing, now on to the mission
+		if determine_winner(players):
+			game.proposing = 0
+			db.session.commit()
+	return jsonify(winner = determine_winner(players), voters = voters)
+
+@app.route("/vote_type")
+def vote_type():
+	game = find_game(session["room"])
+	return jsonify(proposal = bool(game.proposing), mission = bool(1 - game.proposing))
+
+# resting votes is in the mission proposal because we only want it to happen once
+@app.route("/reset_votes")
+def reset_votes():
+	game = find_game(session["room"])
+	game.voting = 0;
+	print("SET VOTING TO 0")
+	game.proposing = 1;
+	db.session.commit()
+	return jsonify("blah")
+
+@app.route("/mission_reset")
+def mission_reset():
+	game = find_game(session["room"])
+	game.proposing = 0
+	db.session.commit()
+
+# TODO combine mission voted with voted
+
+@app.route("/mission_vote")
+def mission_vote():
+	players = Player.query.filter_by(room = session["room"]).all();
+	voters = len(find_mission_voted_players(players))
+	game = find_game(session["room"])
+	# TODO demessify this
+	# TODO in javascript make sure that all votes that get here are genuine
+	status = False
+	if (game.round == 1) or (game.round == 3):
+		if voters == 2:
+			status = True
+	else:
+		if voters == 3:
+			status = True
+	return jsonify(done = status, winner = determine_winner(players))
+
+
+
+	
+
 
 # TODO route that gives cards design out
 
 # POST requests from javascript that send info, also will maybe work if i add an ai in the future
 
 # TODOIF make it impossible for user to access the post requests
-@app.route("/vote")
+@app.route("/vote", methods = ["GET","POST"])
 def vote():
-	return "vote"
+	vote = request.form.get("vote")
+	game = find_game(session["room"])
+	player = find_player(session["username"])
+	if game.proposing:
+		player.vote = vote
+	else:
+		player.mission_vote = vote
+	db.session.commit()
+	return redirect("/")
 
+# voting is set to 1 when proposal has been made, also increasing round is
 @app.route("/propose", methods = ["GET","POST"])
 def propose():
 	proposal = request.form.getlist("proposal[]")
-	for i in range(0,len(proposal)):
+	for i in range(0, len(proposal)):
 		proposal[i] = int(Player.query.filter_by(username = proposal[i]).first().role)
 	# TODO verify that the request was good
+	# TODO verify request came from player it was supposed to
 	# insert proposal 
 	game = find_game(session["room"])
 	game.in_proposal = list_to_sqlite_string(proposal)
 	game.voting = 1
+	game.round += 1
+	# this is here because of a race condition problem
+	players = Player.query.filter_by(room = session["room"]).all();
+	game = find_game(session["room"])
+	for player in players:
+		player.vote = None;
 	db.session.commit()
 	return redirect("/")
 
@@ -181,6 +266,14 @@ def ready():
 		db.session.commit()
 	return redirect("/")
 
-
 if __name__ == "__main__":
 	app.run(debug = True)
+
+
+
+
+
+
+
+
+

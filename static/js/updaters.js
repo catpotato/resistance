@@ -1,22 +1,12 @@
-function begin_game(){
-	// update ui to say that game has started
-	$("#begun p").text("started");
-	// remove status checker from interval
-	NORM_INTERVAL.remove([GET_ready_status]);
-	update(roles, "secrets");
-	// give out turn order
-	update(turn_order, "turn_order");
-	// check who is proposing
-	update(proposer, "proposer");
-	// once proposal is made, add a checker to everyone elses pages so that they can get the info when a proposal is made
-	NORM_INTERVAL.add([GET_voting]);
-}
-
+console.log("pigs in a blanket");
 function update(handler, adress){
 	$.getJSON($SCRIPT_ROOT + '/' + adress, {}, function(data){
 		handler(data);
 	});
 }
+/*
+	UI updater functions
+*/
 //updates roles view
 function roles(secrets){
 	$("#secrets #role").text(secrets.role);
@@ -27,7 +17,7 @@ function roles(secrets){
 //updates turn_order view
 function turn_order(order){
 	for(var i = 0; i < order.turn_order.length; i++){
-		//converts i's to letters
+		//converts i's to letters.
 		var order_element = "#order  #" + String.fromCharCode(97 + i);
 		var proposal_element = "#proposal  #" + String.fromCharCode(97 + i);
 		$(order_element).text(order.turn_order[i]);
@@ -36,13 +26,26 @@ function turn_order(order){
 }
 //updates propsoer view
 function proposer(proposer){
-	$("#proposing p").text(proposer.username)
+	$("#proposing p").text(proposer.username);
 }
 
 function proposal(game){
-	console.log(game.proposal);
-	$("#proposal-result p").text(game.proposal)
+	$("#proposal-result p").text(game.proposal);
 }
-function new_turn(){
 
+function votes(votes){
+	console.log("updating votes ui");
+	$("#vote-results #result").text(votes.votes);
+	//once votes have been shown, erase them
+}
+//updates who won the mission
+function winner(passed){
+	var result;
+	if(passed){
+		result = "mission passed";
+	}
+	if(passed){
+		result = "mission failed";
+	}
+	$("#mission-results p").text(result);
 }

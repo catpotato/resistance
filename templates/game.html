@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block conditional_js %}
-NORM_INTERVAL.add([GET_ready_status]);
+
 // adds checking the ready status to be checked at a moderate interval
 {% endblock %}
 {% block main %}
@@ -44,9 +44,14 @@ NORM_INTERVAL.add([GET_ready_status]);
 	</section>>
 	<section id = "vote-results">
 		<h2> The Voting Results </h2>
-		<p></p>		
+		<p id = "result"> </p>
+		<p id = "a"></p>
+		<p id = "b"></p>			
+		<p id = "c"></p>	
+		<p id = "d"></p>	
+		<p id = "e"></p>	
 	</section>
-	<section id = "vote-results">
+	<section id = "mission-results">
 		<h2> The Mission Results </h2>
 		<p></p>		
 	</section>
