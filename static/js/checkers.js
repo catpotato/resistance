@@ -1,33 +1,6 @@
-console.log("hiccup")
+/*console.log("hiccup")
 // TODOIF consolidate get with update functions
-function GET_ready_status(){
-	update(ready_status, "ready_status");
-}
-function ready_status(game){
-	if(game.ready){
-		$("#begun p").text("started");
-		console.log("game has begun");
-		// remove status checker from interval
-		console.log("removing ready checker");
-		NORM_INTERVAL.remove([GET_ready_status]);
-		update(roles, "secrets");
-		// give out turn order
-		update(turn_order, "turn_order");
-		new_turn();
-	}
-}
 
-function new_turn(){
-	console.log("creating new turn");
-	console.log("updating proposer");
-	update(proposer, "proposer");
-	console.log("resetting game");
-	$.getJSON($SCRIPT_ROOT + '/reset_votes', {}, function(data){
-		console.log("adding proposal checker");
-		NORM_INTERVAL.add([GET_voting]);
-	});
-	
-}
 
 // voting means they are not proposing anymore
 function GET_voting(){
@@ -76,7 +49,7 @@ function mission_vote(vote){
 	new_turn();
 	// TODO check for winner and reset the game if there is a winner
 }
-
+*/
 
 
 

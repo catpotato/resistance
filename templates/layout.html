@@ -9,11 +9,13 @@
 			{% endblock %}
   			//give global varibale for root of application
 		</script>
+		<script src = "{{ url_for('static', filename = 'js/actions.js') }}"></script>	
+		<script src = "{{ url_for('static', filename = 'js/visuals.js') }}"></script>	
+		<script src = "{{ url_for('static', filename = 'js/monitors.js') }}"></script>
 		<script src = "{{ url_for('static', filename = 'js/intervals.js') }}"></script>
 		<script src = "{{ url_for('static', filename = 'js/checkers.js') }}"></script>
 		<script src = "{{ url_for('static', filename = 'js/updaters.js') }}"></script>
-		<script src = "{{ url_for('static', filename = 'js/main.js') }}"></script>
-		<script src = "{{ url_for('static', filename = 'js/monitors.js') }}"></script>
+		<script src = "{{ url_for('static', filename = 'js/main.js') }}"></script>	
 	</head>
 	<body>
 		<a href = "/"><h1>Resistance</h1></a>

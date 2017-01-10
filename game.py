@@ -44,6 +44,7 @@ class Game(db.Model):
 	in_proposal = db.Column(db.String)
 	cycle = db.Column(db.Integer)
 	voting = db.Column(db.Integer)
+	round_iterator = db.Column(db.Integer)
 
 	def __str__(self):
 		return ("room: " + self.room + " | status: " + str(self.active))

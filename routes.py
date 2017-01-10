@@ -150,7 +150,7 @@ def voted():
 	# increase cycle by 1 if everyone has voted
 	if voters == 5:
 		game = find_game(session["room"])
-		game.cycle += 1
+		#game.cycle += 1
 		# if there is a winner, and there are 5 votes, the game is no longer proposing, now on to the mission
 		if determine_winner(players):
 			game.proposing = 0
@@ -194,9 +194,25 @@ def mission_vote():
 	else:
 		if voters == 3:
 			status = True
-	return jsonify(done = status, winner = determine_winner(players))
-
-
+	votes = []
+	for player in find_mission_voted_players(players):
+		votes.append(player.mission_vote)
+	# shuffle votes
+	random.shuffle(votes)
+	winner = determine_mission_winner(find_mission_voted_players(players))
+	if game.round == 1:
+		game.mission_1 = winner
+	elif game.round == 2:
+		game.mission_2 = winner
+	elif game.round == 3:
+		game.mission_3 = winner
+	elif game.round == 4:
+		game.mission_4 = winner
+	elif game.round == 5:
+		game.mission_5 = winner
+	db.session.commit()
+	# increase round 
+	return jsonify(done = status, winner = winner, votes = votes)
 
 	
 
@@ -215,10 +231,13 @@ def vote():
 		player.vote = vote
 	else:
 		player.mission_vote = vote
+		if game.round_iterator == 0:
+			game.round_iterator = 1
+			game.round += 1
 	db.session.commit()
 	return redirect("/")
 
-# voting is set to 1 when proposal has been made, also increasing round is
+# voting is set to 1 when proposal has been made, also increasing round is done here, votes set to null so it only happens once and not while people are voting
 @app.route("/propose", methods = ["GET","POST"])
 def propose():
 	proposal = request.form.getlist("proposal[]")
@@ -230,12 +249,14 @@ def propose():
 	game = find_game(session["room"])
 	game.in_proposal = list_to_sqlite_string(proposal)
 	game.voting = 1
-	game.round += 1
+	game.round_iterator = 0;
+	game.cycle += 1
 	# this is here because of a race condition problem
 	players = Player.query.filter_by(room = session["room"]).all();
-	game = find_game(session["room"])
+	#game = find_game(session["room"])
 	for player in players:
 		player.vote = None;
+		player.mission_vote = None;
 	db.session.commit()
 	return redirect("/")
 

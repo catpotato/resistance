@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 {% block conditional_js %}
-
+$.getJSON($SCRIPT_ROOT + '/user_info', {}, function(user){
+		$("#username").text(user.username);
+		$("#room").text(user.room);
+	});
 // adds checking the ready status to be checked at a moderate interval
 {% endblock %}
 {% block main %}
@@ -28,6 +31,7 @@
 	</section>
 	<section id = "previous-rounds">
 		<h2>The Game so Far</h2>
+		<p id = "history"></p>
 		<p id = "round-a"></p>
 		<p id = "round-b"></p>
 		<p id = "round-c"></p>
@@ -41,7 +45,7 @@
 	<section id = "proposal-result">
 		<h2>The Proposal:</h2>
 		<p></p>
-	</section>>
+	</section>
 	<section id = "vote-results">
 		<h2> The Voting Results </h2>
 		<p id = "result"> </p>

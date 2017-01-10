@@ -65,7 +65,11 @@ def determine_winner(players):
 	else:
 		return 0
 
-
+def determine_mission_winner(players):
+	for player in players:
+		if player.mission_vote == 0:
+			return 0
+	return 1
 
 
 #def turn_order_to_players(players, turn_order):
