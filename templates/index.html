@@ -1,16 +1,30 @@
 {% extends "layout.html" %}
 {% block conditional_js %}
 {% endblock %}
+
+{% block conditional_css %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/login.css') }}">
+{% endblock %}
 {% block main %}
+
 <main>
-	<form method = "POST" action = "/">
-		{{ form.username.label }}
-		{{ form.username }}
+	<section id = "spade">
+		<img src = "https://www.svgimages.com/svg-image/s5/spade-silhouette.svg"/>
+	</section>
+	<section id = "label">
+  		<h1>Resistance</h1> 
+	</section>
+	<h2>Resistance</h2>
+	<section id = "login">
+		<form method = "POST" action = "/">
+			{{ form.username.label }}
+			{{ form.username }}
 
-		{{ form.room.label }}
-		{{ form.room }}
-
-		{{ form.submit() }}
-	</form>
+			{{ form.room.label }}
+			{{ form.room }}
+			<div id = "highlight"></div>
+			{{ form.submit() }}
+		</form>
+	</section>
 </main>
 {% endblock %}

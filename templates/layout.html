@@ -16,9 +16,10 @@
 		<script src = "{{ url_for('static', filename = 'js/checkers.js') }}"></script>
 		<script src = "{{ url_for('static', filename = 'js/updaters.js') }}"></script>
 		<script src = "{{ url_for('static', filename = 'js/main.js') }}"></script>	
+		{% block conditional_css %}
+		{% endblock %}
 	</head>
 	<body>
-		<a href = "/"><h1>Resistance</h1></a>
 		{% block main %}
 		{% endblock %}
 	</body>
