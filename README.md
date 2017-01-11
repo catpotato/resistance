@@ -4,10 +4,8 @@ a web app inspired by the game [resistance](https://en.wikipedia.org/wiki/The_Re
 
 to begin, install the dependencies from requirements.txt in any way you choose (reccomend with a virtual environment)
 
-execute:
+then execute
 ``` 
 python routes.py
 ```
-
-to begin
 
