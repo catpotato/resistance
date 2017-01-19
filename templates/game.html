@@ -1,14 +1,48 @@
 {% extends "layout.html" %}
 {% block conditional_js %}
+var USERNAME;
+var ROOM;
 $.getJSON($SCRIPT_ROOT + '/user_info', {}, function(user){
-		$("#username").text(user.username);
-		$("#room").text(user.room);
+		ROOM = user.room;
+		USERNAME = user.username
+		$("#room").text(ROOM);
 	});
 // adds checking the ready status to be checked at a moderate interval
 {% endblock %}
+{% block conditional_css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/game.css') }}">
+{% endblock %}
 {% block main %}
 <main>
-	<section id = "user-info">
+	<section id = "pregame">
+	<section id = "highlight-box">
+		<div id = "highlight"></div>
+		<h1>Players:</h1>
+	</section>
+	<table id = "default">
+		<tr>
+    		<td>-</td>
+    		<td>-</td>
+  		</tr>
+  		<tr>
+    		<td>-</td>
+    		<td>-</td>
+  		</tr>
+	</table>
+  	<h3 id = "ready"><input type = "checkbox" id = "ready-button">ready?</h3>
+  	<h2>Room: <span id = "room">SUB</span></h2>
+  	</section>
+  	<section id = "secrets">
+		<h2>Your Role:</h2>
+		<h4 id = "role">your mum</h4>
+		<h4 id = "spy-friend"></h4>
+		<h4 id = "spy-one"></h4>
+		<h4 id = "spy-two"></h4>
+		<h3>Dissapearing in: <span id = "countdown"></span></h3>
+	</section>
+  	<section id = "old-ui"> 
+  	
+	<!--<section id = "user-info">
 		<h2>Who you are</h2>
 		<p id = "username"></p>
 		<p id = "room"></p>
@@ -20,40 +54,117 @@ $.getJSON($SCRIPT_ROOT + '/user_info', {}, function(user){
 	<section id = "ready">
 		<h2>Ready?</h2>
 		<p><input type = "checkbox" id = "ready-button">Ready</p>
+	</section>-->
+	<section id = "highlight-box">
+		<div id = "highlight"></div>
+		<h1>Proposer</h1>
 	</section>
 	<section id = "order">
-		<h2>Order</h2>
-		<p id = "a"></p>
-		<p id = "b"></p>
-		<p id = "c"></p>
-		<p id = "d"></p>
-		<p id = "e"></p>
+		<table id = "list">
+  			<tr id = "usernames">
+    			<td id = "a">suasuage</td>
+    			<td id = "b">pork</td>
+    			<td id = "c">fuck off</td>
+    			<td id = "d">lindsay </td>
+    			<td id = "e">jack</td>
+  			</tr>
+  			<tr id = "spade">
+    			<td id = "a">
+   					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="300.000000pt" height="300.000000pt" viewBox="0 0 300.000000 300.000000" preserveAspectRatio="xMidYMid meet">
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"  stroke="none">
+							<path class="node" id="node1" d="M1450 2918 c-103 -146 -292 -320 -630 -578 -325 -248 -415 -333 -514 -485 -94 -143 -128 -264 -129 -465 -2 -149 12 -219 61 -320 71 -144 204 -245 386 -290 60 -15 113 -20 220 -20 155 0 227 14 334 67 55 27 184 142 194 173 3 8 9 11 14 7 8 -7 -5 -174 -26 -332 -14 -103 -54 -244 -91 -322 -74 -156 -194 -252 -409 -329 l-65 -23 705 0 705 0 -70 25 c-211 73 -331 172 -409 338 -19 39 -43 107 -55 151 -22 90 -61 370 -61 446 0 49 13 66 25 30 10 -32 128 -135 188 -165 107 -52 178 -66 335 -66 113 0 161 4 225 21 326 83 477 324 438 697 -35 326 -156 494 -596 827 -148 112 -258 197 -265 205 -3 3 -39 33 -80 67 -96 77 -275 263 -331 342 -24 33 -46 61 -50 61 -3 0 -26 -28 -49 -62z"></path>
+						</g>
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#A1A1A1" stroke="none">
+						</g>
+					</svg>
+    			</td>
+    			<td id = "b">
+   					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="300.000000pt" height="300.000000pt" viewBox="0 0 300.000000 300.000000" preserveAspectRatio="xMidYMid meet">
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"  stroke="none">
+							<path class="node" id="node1" d="M1450 2918 c-103 -146 -292 -320 -630 -578 -325 -248 -415 -333 -514 -485 -94 -143 -128 -264 -129 -465 -2 -149 12 -219 61 -320 71 -144 204 -245 386 -290 60 -15 113 -20 220 -20 155 0 227 14 334 67 55 27 184 142 194 173 3 8 9 11 14 7 8 -7 -5 -174 -26 -332 -14 -103 -54 -244 -91 -322 -74 -156 -194 -252 -409 -329 l-65 -23 705 0 705 0 -70 25 c-211 73 -331 172 -409 338 -19 39 -43 107 -55 151 -22 90 -61 370 -61 446 0 49 13 66 25 30 10 -32 128 -135 188 -165 107 -52 178 -66 335 -66 113 0 161 4 225 21 326 83 477 324 438 697 -35 326 -156 494 -596 827 -148 112 -258 197 -265 205 -3 3 -39 33 -80 67 -96 77 -275 263 -331 342 -24 33 -46 61 -50 61 -3 0 -26 -28 -49 -62z"></path>
+						</g>
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#A1A1A1" stroke="none">
+						</g>
+					</svg>
+    			</td>
+    			<td id = "c">
+   					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="300.000000pt" height="300.000000pt" viewBox="0 0 300.000000 300.000000" preserveAspectRatio="xMidYMid meet">
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"  stroke="none">
+							<path class="node" id="node1" d="M1450 2918 c-103 -146 -292 -320 -630 -578 -325 -248 -415 -333 -514 -485 -94 -143 -128 -264 -129 -465 -2 -149 12 -219 61 -320 71 -144 204 -245 386 -290 60 -15 113 -20 220 -20 155 0 227 14 334 67 55 27 184 142 194 173 3 8 9 11 14 7 8 -7 -5 -174 -26 -332 -14 -103 -54 -244 -91 -322 -74 -156 -194 -252 -409 -329 l-65 -23 705 0 705 0 -70 25 c-211 73 -331 172 -409 338 -19 39 -43 107 -55 151 -22 90 -61 370 -61 446 0 49 13 66 25 30 10 -32 128 -135 188 -165 107 -52 178 -66 335 -66 113 0 161 4 225 21 326 83 477 324 438 697 -35 326 -156 494 -596 827 -148 112 -258 197 -265 205 -3 3 -39 33 -80 67 -96 77 -275 263 -331 342 -24 33 -46 61 -50 61 -3 0 -26 -28 -49 -62z"></path>
+						</g>
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#A1A1A1" stroke="none">
+						</g>
+					</svg>
+    			</td>
+    			<td id = "d">
+   					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="300.000000pt" height="300.000000pt" viewBox="0 0 300.000000 300.000000" preserveAspectRatio="xMidYMid meet">
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"  stroke="none">
+							<path class="node" id="node1" d="M1450 2918 c-103 -146 -292 -320 -630 -578 -325 -248 -415 -333 -514 -485 -94 -143 -128 -264 -129 -465 -2 -149 12 -219 61 -320 71 -144 204 -245 386 -290 60 -15 113 -20 220 -20 155 0 227 14 334 67 55 27 184 142 194 173 3 8 9 11 14 7 8 -7 -5 -174 -26 -332 -14 -103 -54 -244 -91 -322 -74 -156 -194 -252 -409 -329 l-65 -23 705 0 705 0 -70 25 c-211 73 -331 172 -409 338 -19 39 -43 107 -55 151 -22 90 -61 370 -61 446 0 49 13 66 25 30 10 -32 128 -135 188 -165 107 -52 178 -66 335 -66 113 0 161 4 225 21 326 83 477 324 438 697 -35 326 -156 494 -596 827 -148 112 -258 197 -265 205 -3 3 -39 33 -80 67 -96 77 -275 263 -331 342 -24 33 -46 61 -50 61 -3 0 -26 -28 -49 -62z"></path>
+						</g>
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#A1A1A1" stroke="none">
+						</g>
+					</svg>
+    			</td>
+    			<td id = "e">
+   					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="300.000000pt" height="300.000000pt" viewBox="0 0 300.000000 300.000000" preserveAspectRatio="xMidYMid meet">
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"  stroke="none">
+							<path class="node" id="node1" d="M1450 2918 c-103 -146 -292 -320 -630 -578 -325 -248 -415 -333 -514 -485 -94 -143 -128 -264 -129 -465 -2 -149 12 -219 61 -320 71 -144 204 -245 386 -290 60 -15 113 -20 220 -20 155 0 227 14 334 67 55 27 184 142 194 173 3 8 9 11 14 7 8 -7 -5 -174 -26 -332 -14 -103 -54 -244 -91 -322 -74 -156 -194 -252 -409 -329 l-65 -23 705 0 705 0 -70 25 c-211 73 -331 172 -409 338 -19 39 -43 107 -55 151 -22 90 -61 370 -61 446 0 49 13 66 25 30 10 -32 128 -135 188 -165 107 -52 178 -66 335 -66 113 0 161 4 225 21 326 83 477 324 438 697 -35 326 -156 494 -596 827 -148 112 -258 197 -265 205 -3 3 -39 33 -80 67 -96 77 -275 263 -331 342 -24 33 -46 61 -50 61 -3 0 -26 -28 -49 -62z"></path>
+						</g>
+						<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#A1A1A1" stroke="none">
+						</g>
+					</svg>
+    			</td>
+  			</tr>
+		</table>
 	</section>
 	<section id = "previous-rounds">
-		<h2>The Game so Far</h2>
-		<p id = "history"></p>
-		<p id = "round-a"></p>
-		<p id = "round-b"></p>
-		<p id = "round-c"></p>
-		<p id = "round-d"></p>
-		<p id = "round-e"></p>
+		<section id = "highlight-box">
+			<div id = "highlight"></div>
+			<h1>Missions</h1>
+		</section>
+		<table id = "default">
+		<tr>
+    		<td id = "a">-</td>
+    		<td id = "b">-</td>
+  		</tr>
+  		<tr>
+    		<td id = "c">-</td>
+    		<td id = "d">-</td>
+  		</tr>
+	</table>
 	</section>
-	<section id = "proposing">
-		<h2> Proposer</h2>
-		<p></p>
-	</section>
+
 	<section id = "proposal-result">
 		<h2>The Proposal:</h2>
-		<p></p>
+		<h4></h4>
 	</section>
+	
 	<section id = "vote-results">
 		<h2> The Voting Results </h2>
 		<p id = "result"> </p>
-		<p id = "a"></p>
-		<p id = "b"></p>			
-		<p id = "c"></p>	
-		<p id = "d"></p>	
-		<p id = "e"></p>	
+		<table id = "list">
+  			<tr id = "usernames">
+    			<td id = "a">suasuage</td>
+   				 <td id = "b">pork</td>
+   				 <td id = "c">fuck off</td>
+   				 <td id = "d">lindsay </td>
+   				 <td id = "e">jack</td>
+  			</tr>
+  			<tr id = "votes">
+    			<td id = "a"></td>
+    			<td id = "b"></td>
+    			<td id = "c"></td>
+   				<td id = "d"></td>
+    			<td id = "e"></td>
+  			</tr>
+		</table>	
+	</section>
+	<section id = "vote-cards">
+		<h2>Vote:</h2>
+  		<section id = "vote-card-container">
+    		<img id = "yay" src = "https://www.svgimages.com/svg-image/s5/spade-silhouette.svg">
+    		<img id = "nay" src = "https://upload.wikimedia.org/wikipedia/commons/4/42/Love_Heart_SVG.svg">
+  		</section>
 	</section>
 	<section id = "mission-results">
 		<h2> The Mission Results </h2>
@@ -61,28 +172,31 @@ $.getJSON($SCRIPT_ROOT + '/user_info', {}, function(user){
 	</section>
 	<section id = "proposal">
 		<h2>Propose Your Mission</h2>
-		<button type = "button" id = "a">Player 1</button>
-		<button type = "button" id = "b">Player 2</button>
-		<button type = "button" id = "c">Player 3</button>
-		<button type = "button" id = "d">Player 4</button>	
-		<button type = "button" id = "e">Player 5</button>
+		<table id = "list">
+  			<tr id = "lables">
+    			<td id = "a">suasuage</td>
+   				<td id = "b">pork</td>
+   				<td id = "c">fuck off</td>
+   				<td id = "d">lindsay </td>
+   				<td id = "e">jack</td>
+  			</tr>
+  			<tr id = "checkboxes">
+    			<td><input id = "a" type = "checkbox"></td>
+    			<td><input id = "b" type = "checkbox"></td>
+    			<td><input id = "c" type = "checkbox"></td>
+   				<td><input id = "d" type = "checkbox"></td>
+    			<td><input id = "e" type = "checkbox"></td>
+  			</tr>
+		</table>
 		<button type = "button" id = "confirm">confirm</button>
 	</section>
-	<section id = "vote-cards">
-		<h2>Place Your Vote</h2>
-		<button type = "button" id = "yay">Yay!</button>
-		<button type = "button" id = "nay">Nay!</button>	
-	</section>
-	<section id = "secrets">
-		<h2>Your Role (keep this a secret!)</h2>
-		<p id = "role"></p>
-		<p id = "spy-friend"></p>
-		<p id = "spy-one"></p>
-		<p id = "spy-two"></p>
-	</section>
+	
+	
 	<section id = "win">
 		<h2>Has Anybody Won Yet?</h2>
 		<p></p>
 	</section>
+</section>
 </main>
+
 {% endblock %}

@@ -75,8 +75,6 @@ def mission_status():
 @app.route("/voting")
 def voting():
 	game = find_game(session["room"])
-	print("I RETURNED VOTING AND IT'S VALUE WAS : ")
-	print(game.voting)
 	return jsonify(voting = bool(game.voting))
 
 @app.route("/proposer")
@@ -86,7 +84,7 @@ def proposer():
 	turn = ((game.cycle+1) % 5) - 1
 	role = sqlite_string_to_list(game.turn_order)[turn]
 	proposer = Player.query.filter_by(role = role).first()
-	return jsonify(username = proposer.username)
+	return jsonify(username = proposer.username, turn = turn)
 
 # gives out role and other role information
 @app.route("/secrets")
@@ -148,14 +146,14 @@ def voted():
 	players = Player.query.filter_by(room = session["room"]).all();
 	voters = len(find_voted_players(players))
 	# increase cycle by 1 if everyone has voted
+	game = find_game(session["room"])
 	if voters == 5:
-		game = find_game(session["room"])
 		#game.cycle += 1
 		# if there is a winner, and there are 5 votes, the game is no longer proposing, now on to the mission
 		if determine_winner(players):
 			game.proposing = 0
 			db.session.commit()
-	return jsonify(winner = determine_winner(players), voters = voters)
+	return jsonify(proposal = game.in_proposal, winner = determine_winner(players), voters = voters)
 
 @app.route("/vote_type")
 def vote_type():
@@ -166,9 +164,11 @@ def vote_type():
 @app.route("/reset_votes")
 def reset_votes():
 	game = find_game(session["room"])
-	game.voting = 0;
-	print("SET VOTING TO 0")
-	game.proposing = 1;
+	game.voting = 0
+	game.proposing = 1
+	if game.round_iterator == 0:
+		game.round_iterator = 1
+		game.round += 1
 	db.session.commit()
 	return jsonify("blah")
 
@@ -229,6 +229,7 @@ def vote():
 	player = find_player(session["username"])
 	if game.proposing:
 		player.vote = vote
+		print(player.username + " voted " + str(player.vote))
 	else:
 		player.mission_vote = vote
 		if game.round_iterator == 0:
@@ -241,6 +242,7 @@ def vote():
 @app.route("/propose", methods = ["GET","POST"])
 def propose():
 	proposal = request.form.getlist("proposal[]")
+	print(proposal)
 	for i in range(0, len(proposal)):
 		proposal[i] = int(Player.query.filter_by(username = proposal[i]).first().role)
 	# TODO verify that the request was good
@@ -249,14 +251,14 @@ def propose():
 	game = find_game(session["room"])
 	game.in_proposal = list_to_sqlite_string(proposal)
 	game.voting = 1
-	game.round_iterator = 0;
+	game.round_iterator = 0
 	game.cycle += 1
 	# this is here because of a race condition problem
-	players = Player.query.filter_by(room = session["room"]).all();
+	players = Player.query.filter_by(room = session["room"]).all()
 	#game = find_game(session["room"])
 	for player in players:
-		player.vote = None;
-		player.mission_vote = None;
+		player.vote = None
+		player.mission_vote = None
 	db.session.commit()
 	return redirect("/")
 

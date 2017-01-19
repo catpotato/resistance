@@ -8,39 +8,39 @@ function Vote(text){
 		this.boolean = 0;
 	}
 }
+
 $(function(){
+
 	/*
 		all of these are essentially POST requests that are enacted by the user
 	*/
 	// propsal button listeners
-	var proposal = [];
 	$("#proposal button").on("click", function(){
 		// TODO limit user from inputing more than they are allowed to on a turn
-		// TODO rethink UI for this
-		var id = $(this).text();
-		if(id != "confirm"){
-			proposal.push(id);
-		}
-		else {
-			$.post($SCRIPT_ROOT + "/propose", {"proposal[]" : proposal}, function(){});
-			proposal = [];
-		}
+		var proposal = new URLArgument(get_names(find_checked("#checkboxes td input"), "#proposal #lables"), "array");
+		post_data_to("/propose", proposal.as("proposal"));
+		hide("#proposal");
+		// TODO uncheck all the boxes
 	});
 	// ready checkbox listener
 	$("#ready-button").bind("click", function(){
+		hide("#ready-button");
+		$("#pregame #ready").text("waiting for others...");
 		ready_monitor.activate();
-		console.log("sending ready state to server");
-		$.getJSON($SCRIPT_ROOT + '/ready', {}, function(){} );
+		send_ready_status();
 	});
 	// voting button listener
-	$("#vote-cards button").bind("click", function(){
-		var vote = new Vote($(this).attr("id"));
+	$("#vote-cards img").bind("click", function(){
+		hide("#vote-cards");
+		var vote_value = new Vote($(this).attr("id"));
+		var vote = new URLArgument(vote_value.boolean);
 		console.log("sending vote");
-		// TODO first make sure vote is coming from somebody good
-		$.post($SCRIPT_ROOT + "/vote", {"vote" : vote.boolean}, function(){console.log("vote sent");});
+		post_data_to("/vote", vote.as("vote"));
+		/*$.post($SCRIPT_ROOT + "/vote", {"vote" : vote.boolean}, function(){console.log("vote sent");});*/
 		$.getJSON($SCRIPT_ROOT + '/vote_type', {}, function(vote){
 			if(vote.proposal){
 				// after you vote, add checker to see if other have voted
+				//these are both here because you hvae to check to see if others finished voting for proposal and then possibly mission
 				proposal_voting_completed_monitor.activate();
 				mission_voting_completed_monitor.activate();
 			}

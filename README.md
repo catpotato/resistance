@@ -10,3 +10,18 @@ python routes.py
 ```
 and vist ```localhost:5000``` in your browser
 
+#TODO's
+
+- make spies win if game gets to round end
+- add win state
+- show options for room
+- add descriptions to the names
+- try to use usernames that people can recognize
+- tell player how many people to put on the mission
+- make table list scalable to longer names
+- make color of mission reflect outcome
+- verify that checkboxes are the correct amount
+- fix ready button
+- make the backend code nicer
+- map game object to front end code
+- redirect user if they are not logged in

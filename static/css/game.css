@@ -1,0 +1,155 @@
+/* most of the display stuff is up here you dolts*/
+#old-ui{
+	display:none;
+}
+#vote-cards{
+	display:none;
+}
+#proposal{
+	display:none;
+}
+#proposal-result{
+	display:none;
+}
+#vote-results{
+	display: none;
+}
+#secrets{
+	display:none;
+}
+#win{
+	display: none;
+}
+#mission-results{
+	display: none;
+}
+#default{
+	border-collapse: collapse;
+	margin:auto;
+	border: 2px solid black;
+	border-radius: 20px;
+	border-radius: 6px;
+	transform: rotate(2deg);
+}
+#default td{
+	/*border-right: 1px solid black;
+	border-bottom: 1px solid black;*/
+	width:100px;
+	text-align:center;
+	font-weight:400;
+	font-family: snowstorm;
+	padding: 5px;
+	border: 1px solid black;
+	transform: rotate(-2deg);
+}
+h1{
+	font-family: snowstorm;
+	font-weight: 400;
+	text-align: center;
+	color: white;
+	transform: rotate(0deg);
+	margin-top:-1em;
+	font-size: 1.17em;
+}
+#highlight{
+	height: 1.1em;
+	width: 120%;
+	margin-left: -10%;
+	background: red;
+	transform: rotate(-2deg);
+	z-index:-1;
+	/*border:2px solid black;*/
+}
+#highlight-box{
+	display: table;
+	font-size: 2.4em;
+	margin-bottom: -35px;
+}
+main{
+	width: 300px;
+	display: table;
+	margin:auto;
+}
+h2{
+	font-family: snowstorm light;
+	text-transform: uppercase;
+	font-size: 1.3em;
+	text-align: center;
+	padding: 4px;
+	background: black;
+	color:white;
+	border: 1px solid black;
+	display:table;
+	margin:auto;
+	margin-top:20px;
+	letter-spacing: .2em;
+	
+}
+h3{
+	font-family: snowstorm;
+	text-transform: lowercase;
+	font-size: 1.5em;
+	text-align: center;
+	margin:.3em;
+	margin-top:1em;
+}
+h4{
+	font-family: snowstorm light;
+  	letter-spacing: 3px;
+  	text-transform: uppercase;
+  	font-size: 1.1em;
+  	text-align: center
+}
+	
+}
+input[type='checkbox']{
+	margin-right: 20px;
+}
+
+#list{
+	width:320px;
+  font-family:snowstorm;
+  text-align: center;
+  padding-bottom: 8px;
+}
+#list td:nth-child(2n){
+  transform: rotate(-2deg);
+}
+#list td:nth-child(2n +1){
+  transform: rotate(2deg);
+}
+#list svg{
+  width:30px;
+  height:30px;
+  display: table;
+  margin:auto;
+  /*display:none;*/
+  fill: white;
+}
+#vote-cards img{
+  display: inline-block;
+  height: 100px;
+  transition: .2s all;
+}
+#vote-cards img:hover{
+  cursor: pointer;
+  transform: rotate(0deg);
+  transition: .2s all;
+}
+#yay{
+  transform: rotate(10deg);
+  margin-right:20px;
+}
+#nay{
+  transform: rotate(-10deg);
+}
+#vote-card-container{
+	display: table;
+	margin: auto;
+}
+#vote-results img{
+	width:30px;
+}
+#vote-results #votes{
+	font-family: "snowstorm light";
+}

@@ -1,99 +1,96 @@
 #spade{
-  margin: auto;
-  display: table;
+    margin: auto;
+    display: table;
 }
 #spade img{
-  width: 250px;
+    width: 250px;
 }
 #label h1{
-  font-family: snowstorm;
-  color:white;
-  text-transform: uppercase;
-  font-weight: 400;
-  font-size: 3em;
-  text-align: center;
-  margin-top: -7px;
+    font-family: snowstorm;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 3em;
+    text-align: center;
+    margin-top: -10px;
 
 }
 h2{
-  font-family: snowstorm;
-  color:white;
-  text-transform: uppercase;
-  font-weight: 400;
-  font-size: 2.8em;
-  text-align: center;
-  margin-top: -82px;
-  transform: rotate(0deg);
+    font-family: snowstorm;
+    color:white;
+    text-transform: uppercase;
+    font-weight:400;
+    font-size: 2.8em;
+    text-align: center;
+    margin-top: -83px;
+    transform: rotate(0deg);
 }
 h1::after{
-  content: "";
-  width: calc(100% + 20px);
-  height: 40px;
-  transform: rotate(-2deg);
-  display: block;
-  background: red;
-  margin:auto;
-  margin-top: -45px;
-  margin-left: -10px;
-  z-index:-1;
-}
-#chump{
-  margin:auto;
-  display:table;
+    content: "";
+    width: calc(100% + 100px);
+    height: 40px;
+    transform: rotate(-1.5deg);
+    display: block;
+    background: red;
+    margin:auto;
+    margin-top: -43px;
+    margin-left: -50px;
+    z-index:-1;
 }
 #login{
-  margin:auto;
-  width: 300px;
-  font-family: snowstorm light;
+    margin:auto;
+    width: 300px;
+    font-family: snowstorm light;
 }
 label{
-  display: block;
-  text-align: center;
-  font-size: 1.5em;
-  margin-bottom: 10px;
+    display: block;
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color:black;
 }
 form{
-  font-family: snowstorm;
+    font-family: snowstorm;
 }
 input{
-  font-size: 1.5em;
-  display:block;
-  margin:auto;
-  font-family: snowstorm light;
-  margin-bottom:15px;
-  text-align: center;
-  outline: none;
-  border: none;
-  background: none;
-  border-bottom: 2px solid black;
+    font-size: 1.5em;
+    display:block;
+    margin:auto;
+    font-family: snowstorm light;
+    margin-bottom:15px;
+    text-align: center;
+    outline: none;
+    border: none;
+    background: none;
+    border-bottom: 2px solid black;
 }
 #submit{
-  border: none;
-  font-family: snowstorm;
-  /*background: black;
-  padding:5px 20px;*/
-  color: white;
-  /*background:red;*/
-  transform: rotate(0deg);
-  z-index:1;
-  margin-top:-37px;
-  transition: .3s all;
-  padding: 6px 25px;
+    border: none;
+    font-family: snowstorm;
+    /*background: black;
+    padding:5px 20px;*/
+    color: white;
+    /*background:red;*/
+    transform: rotate(0deg);
+    z-index:1;
+    margin-top:-37px;
+    transition: .3s all;
+    padding: 6px 25px;
 }
 #highlight{
-  height:35px;
-  width:100px;
-  background:black;
-  margin:auto;
-  transform: rotate(2deg);
-  z-index:-1;
+    height:35px;
+    width:100px;
+    background:black;
+    margin:auto;
+    transform: rotate(2deg);
+    z-index:-1;
 }
 #submit:hover{
-  cursor: pointer;
+    cursor: pointer;
 }
 #login{
-  margin-top:-30px;
+    margin-top:-30px;
 }
 body{
-  overflow: hidden;
+    overflow: hidden;
 }

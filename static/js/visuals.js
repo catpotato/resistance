@@ -9,39 +9,73 @@ function update_visuals(updates){
 		update_visual(updates[i]);
 	}
 }
+function hide(selector){
+	$(selector).css("display", "none");
+}
+function show(selector){
+	$(selector).css("display", "unset");
+}
 /*
 UI Updaters
 */
 function secrets(secret){
 	console.log("updating secrets UI");
-	$("#secrets #role").text(secret.role);
-	$("#secrets #spy-friend").text(secret.spy);
-	$("#secrets #spy-one").text(secret.spy_1);
-	$("#secrets #spy-two").text(secret.spy_2);
-}
+	$("#secrets #role").text("You are the " + secret.role);
+	if(secret.spy != null){
+		$("#secrets #spy-friend").text("The other spy is " + secret.spy);
+	}
+	if(secret.spy_1 != null){
+		$("#secrets #spy-one").text("Spy 1 is " + secret.spy_1);
+		$("#secrets #spy-two").text("Spy 2 is " + secret.spy_2);
+	}}
 
 function turn_order(order){
 	console.log("updating turn order UI");
 	for(var i = 0; i < order.turn_order.length; i++){
 		//converts i's to letters.
-		var order_element = "#order  #" + String.fromCharCode(97 + i);
-		var proposal_element = "#proposal  #" + String.fromCharCode(97 + i);
+		var order_element = "#order #usernames #" + String.fromCharCode(97 + i);
+		var proposal_element = "#proposal #list #lables #" + String.fromCharCode(97 + i);
 		$(order_element).text(order.turn_order[i]);
 		$(proposal_element).text(order.turn_order[i]);
 	}
 }
 
 function proposer(proposer){
-	$("#proposing p").text(proposer.username);
+	//update ui
+	$("#order #spade svg").css("fill", "white");
+	$("#order #spade #" + String.fromCharCode(97 + proposer.turn) + " svg").css("fill", "black")
+	//show the proposer the proposing buttons
+	if(proposer.username == USERNAME){
+		show("#proposal");
+	}
 }
 
 function proposal(game){
-	$("#proposal-result p").text(game.proposal);
+	text = "";
+	for(var i = 0; i < game.proposal.length; i++){
+		text = text + game.proposal[i] + " "
+	}
+	$("#proposal-result h4").text(text);
 }
 
 function votes(votes){
 	console.log("updating votes ui");
-	$("#vote-results #result").text(votes.votes);
+	for(var i = 0; i < votes.votes.length; i++){
+		var current_vote = votes.votes[i];
+		console.log(current_vote);
+		$("#vote-results #usernames #" + String.fromCharCode(97 + i) ).text(current_vote[0])
+		var color = "black";
+		var text = "pass";
+		console.log("current_vote[1] : " + current_vote[1]);
+		if(current_vote[1] == 0){
+			console.log("0 detected");
+			color = "red";
+			text = "fail";
+		}
+		$("#vote-results #votes #" + String.fromCharCode(97 + i) ).text(text);
+		$("#vote-results #votes #" + String.fromCharCode(97 + i) ).css("color",color);
+
+	}
 	//TODO add in thing that says who won
 }
 
@@ -52,9 +86,28 @@ function mission_vote(mission){
 }
 
 function mission_history(history){
+	var i = 0;
+	for (key in history){
+		text = "pass";
+		color = "black";
+		if(history[key] == 0){
+			text = "fail";
+			color = "red";
+		}
+		$("#previous-rounds #" + String.fromCharCode(97 + i)).text(text)
+		$("#previous-rounds #" + String.fromCharCode(97 + i)).css("color", color);
+	}
 	$("#previous-rounds #history").text(history);
 }
 
+function get_rid_of_pre_game_stuff(){
+	$("#pregame").css("display", "none");
+	$("#old-ui").css("display", "initial");
+}
+
+function update_countdown(seconds){
+	$("#countdown").text(seconds);
+}
 /*
 function View_Controller(routes=[]){
 	this.routes = routes;

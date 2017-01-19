@@ -36,6 +36,8 @@ function Monitor(adress, result, value, finished_functions=[]){
 	}
 
 	this.activate = function(){
+		// make sure that the other interval is cleared so you dont have multiuple running at the same time
+		window.clearInterval(this.interval)
 		this.interval = window.setInterval(function(){this.update()}.bind(this), 1000);
 		console.log(this.adress + " checker has been added");
 	}
