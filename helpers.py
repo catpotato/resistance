@@ -15,6 +15,7 @@ def find_ready_players(players):
 def find_voted_players(players):
 	temp = players[:]
 	for player in players:
+		print(player.vote)
 		if(player.vote == None):
 			temp.remove(player)
 	return temp

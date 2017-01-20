@@ -1,5 +1,3 @@
-
-
 function find_checked(boxes_selector){
 	return $(boxes_selector + ":checked");
 }
@@ -22,8 +20,7 @@ function post_data_to(adress, data){
 	if(data.type == "array"){
 		name += "[]";
 	}
-	console.log(make_json_obj(name, data.value))
-	$.post($SCRIPT_ROOT + adress, make_json_obj(name, data.value), function(){console.log(data.name + " was posted to " + "/adress")});
+	$.post($SCRIPT_ROOT + adress, make_json_obj(name, data.value), function(){console.log(data.name + " was posted to /" + adress)});
 	
 }
 function make_json_obj(key, value){
@@ -43,6 +40,15 @@ function URLArgument(value, type = "", name = ""){
 }
 function send_ready_status(){
 	$.getJSON($SCRIPT_ROOT + '/ready', {}, function(){} );
+}
+function send_message(message){
+	show("#html-console");
+	$("#html-console h4").text(message + "...");
+}
+
+function hide_console(){
+	hide("#html-console");
+	$("#html-console h4").text("");
 }
 
 function Countdown(seconds, updater, termination){

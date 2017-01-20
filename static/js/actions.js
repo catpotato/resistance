@@ -15,12 +15,14 @@ function new_turn(){
 	console.log("creating new turn");
 	update_visual(proposer);
 	console.log("resetting game");
+	send_message("waiting for proposal");
 	// because voting has to be reset to 0, maybe this can be moved, not sure
-	$.getJSON($SCRIPT_ROOT + '/reset_votes', {}, function(data){proposal_monitor.activate();});	
+	$.getJSON($SCRIPT_ROOT + '/reset', {}, function(data){proposal_monitor.activate();});	
 }
 
 // means proposal exists, means update UIS
 function proposal_sent(){
+	hide_console();
 	hide("#vote-results");
 	show("#vote-cards");
 	update_visual(proposal);
@@ -40,7 +42,11 @@ function proposal_voting_complete(){
 			for(var i = 0; i < data.proposal.length; i++){
 				if(data.proposal[i] == USERNAME){
 					show("#vote-cards");
-				};
+					hide_console();
+				}
+				else{
+					send_message("waiting for mission");
+				}
 			}
 			new_mission_vote();
 		});
@@ -48,25 +54,17 @@ function proposal_voting_complete(){
 	}
 	else{
 		$("#vote-results h2").text("proposal failed");
-		console.log("proposal has not passed");
 		new_turn();
 	}
 	//if no winner, start new turn, if winner, begin new vote
 }
 
 function new_mission_vote(){
-	//show("#vote-cards");
-	//console.log("new vote created");
+	mission_voting_completed_monitor.activate();
 }
 
 function mission_voting_complete(){
-	if(mission_voting_completed_monitor.raw_data["winner"]){
-		console.log("mission has passed");			
-	}
-	else{
-		console.log("mission has failed");
-	}
-	update_visual(mission_vote);
+	console.log("mission voting complete");
 	update_visual(mission_history);
 	new_turn();
 }

@@ -81,7 +81,7 @@ def voting():
 def proposer():
 	# retrun the person proposing the current mission
 	game = find_game(session["room"])
-	turn = ((game.cycle+1) % 5) - 1
+	turn = ((game.cycle) % 5)
 	role = sqlite_string_to_list(game.turn_order)[turn]
 	proposer = Player.query.filter_by(role = role).first()
 	return jsonify(username = proposer.username, turn = turn)
@@ -161,14 +161,11 @@ def vote_type():
 	return jsonify(proposal = bool(game.proposing), mission = bool(1 - game.proposing))
 
 # resting votes is in the mission proposal because we only want it to happen once
-@app.route("/reset_votes")
+@app.route("/reset")
 def reset_votes():
 	game = find_game(session["room"])
 	game.voting = 0
 	game.proposing = 1
-	if game.round_iterator == 0:
-		game.round_iterator = 1
-		game.round += 1
 	db.session.commit()
 	return jsonify("blah")
 
@@ -186,7 +183,6 @@ def mission_vote():
 	voters = len(find_mission_voted_players(players))
 	game = find_game(session["room"])
 	# TODO demessify this
-	# TODO in javascript make sure that all votes that get here are genuine
 	status = False
 	if (game.round == 1) or (game.round == 3):
 		if voters == 2:
@@ -195,21 +191,39 @@ def mission_vote():
 		if voters == 3:
 			status = True
 	votes = []
+	print("voters : " + str(voters) + " status : " + str(status))
 	for player in find_mission_voted_players(players):
 		votes.append(player.mission_vote)
 	# shuffle votes
 	random.shuffle(votes)
 	winner = determine_mission_winner(find_mission_voted_players(players))
-	if game.round == 1:
-		game.mission_1 = winner
-	elif game.round == 2:
-		game.mission_2 = winner
-	elif game.round == 3:
-		game.mission_3 = winner
-	elif game.round == 4:
-		game.mission_4 = winner
-	elif game.round == 5:
-		game.mission_5 = winner
+	
+	all_missions_received = 0
+	if status == True:
+		current_player = find_player(session["username"])
+		current_player.mission_received = 1
+		db.session.commit()
+		players = Player.query.filter_by(room = session["room"]).all();
+		missions_received = 0
+		if game.round == 1:
+			game.mission_1 = winner
+		elif game.round == 2:
+			game.mission_2 = winner
+		elif game.round == 3:
+			game.mission_3 = winner
+		elif game.round == 4:
+			game.mission_4 = winner
+		elif game.round == 5:
+			game.mission_5 = winner
+		for player in players:
+			if player.mission_received:
+				missions_received += 1
+		print("missions_received: " + str(missions_received))
+		if missions_received == 5:
+			all_missions_received = 1
+			game.round += 1
+			# do what should be done when all missions have been received 
+
 	db.session.commit()
 	# increase round 
 	return jsonify(done = status, winner = winner, votes = votes)
@@ -232,9 +246,9 @@ def vote():
 		print(player.username + " voted " + str(player.vote))
 	else:
 		player.mission_vote = vote
-		if game.round_iterator == 0:
+		'''if game.round_iterator == 0:
 			game.round_iterator = 1
-			game.round += 1
+			game.round += 1'''
 	db.session.commit()
 	return redirect("/")
 
@@ -242,7 +256,6 @@ def vote():
 @app.route("/propose", methods = ["GET","POST"])
 def propose():
 	proposal = request.form.getlist("proposal[]")
-	print(proposal)
 	for i in range(0, len(proposal)):
 		proposal[i] = int(Player.query.filter_by(username = proposal[i]).first().role)
 	# TODO verify that the request was good
@@ -254,10 +267,11 @@ def propose():
 	game.round_iterator = 0
 	game.cycle += 1
 	# this is here because of a race condition problem
-	players = Player.query.filter_by(room = session["room"]).all()
 	#game = find_game(session["room"])
+	players = Player.query.filter_by(room = session["room"]).all();
 	for player in players:
 		player.vote = None
+		player.mission_received = None
 		player.mission_vote = None
 	db.session.commit()
 	return redirect("/")

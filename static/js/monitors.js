@@ -41,6 +41,10 @@ function Monitor(adress, result, value, finished_functions=[]){
 		this.interval = window.setInterval(function(){this.update()}.bind(this), 1000);
 		console.log(this.adress + " checker has been added");
 	}
+
+	this.destroy = function(){
+		window.clearInterval(this.interval);
+	}
 }
 
 // monitors to be used later on

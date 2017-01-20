@@ -47,6 +47,7 @@ function proposer(proposer){
 	//show the proposer the proposing buttons
 	if(proposer.username == USERNAME){
 		show("#proposal");
+		hide_console();
 	}
 }
 
@@ -79,25 +80,39 @@ function votes(votes){
 	//TODO add in thing that says who won
 }
 
-function mission_vote(mission){
-	if(mission.winner)
-	$("#mission-results p").text(votes.votes);
-
-}
-
 function mission_history(history){
 	var i = 0;
+	var spies = 0;
+	var res = 0;
+	console.log(history);
 	for (key in history){
-		text = "pass";
-		color = "black";
+		var text = "pass";
+		var color = "black";
 		if(history[key] == 0){
 			text = "fail";
 			color = "red";
+			spies++;
+		}
+		if(history[key] == null){
+			text = "-";
+		}
+		else{
+			res++;
+		}
+		if(res == 3){
+			$("#win").text("resistance win!");
+			hide("main");
+			show("#win");
+		}
+		if(spies == 3){
+			$("#win").text("spies win!");
+			hide("main");
+			show("#win");
 		}
 		$("#previous-rounds #" + String.fromCharCode(97 + i)).text(text)
 		$("#previous-rounds #" + String.fromCharCode(97 + i)).css("color", color);
+		i++
 	}
-	$("#previous-rounds #history").text(history);
 }
 
 function get_rid_of_pre_game_stuff(){

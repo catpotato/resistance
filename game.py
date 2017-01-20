@@ -14,6 +14,7 @@ class Player(db.Model):
 	vote = db.Column(db.Integer)
 	turn = db.Column(db.Integer)
 	mission_vote = db.Column(db.Integer)
+	mission_received = db.Column(db.Integer)
 
 	def __init__(self, username, room):
 		self.username = username

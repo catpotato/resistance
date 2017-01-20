@@ -21,7 +21,7 @@ and vist ```localhost:5000``` in your browser
 - make table list scalable to longer names
 - make color of mission reflect outcome
 - verify that checkboxes are the correct amount
-- fix ready button
 - make the backend code nicer
 - map game object to front end code
 - redirect user if they are not logged in
+- make checkboxes fit style

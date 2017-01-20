@@ -23,6 +23,9 @@
 #mission-results{
 	display: none;
 }
+#html-console{
+	display: none;
+}
 #default{
 	border-collapse: collapse;
 	margin:auto;

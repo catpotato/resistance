@@ -32,6 +32,7 @@ $(function(){
 	// voting button listener
 	$("#vote-cards img").bind("click", function(){
 		hide("#vote-cards");
+		send_message("waiting for others");
 		var vote_value = new Vote($(this).attr("id"));
 		var vote = new URLArgument(vote_value.boolean);
 		console.log("sending vote");
@@ -39,10 +40,11 @@ $(function(){
 		/*$.post($SCRIPT_ROOT + "/vote", {"vote" : vote.boolean}, function(){console.log("vote sent");});*/
 		$.getJSON($SCRIPT_ROOT + '/vote_type', {}, function(vote){
 			if(vote.proposal){
+				console.log("vote proposal determined")
 				// after you vote, add checker to see if other have voted
 				//these are both here because you hvae to check to see if others finished voting for proposal and then possibly mission
 				proposal_voting_completed_monitor.activate();
-				mission_voting_completed_monitor.activate();
+				/*mission_voting_completed_monitor.activate();*/
 			}
 		});
 	});
